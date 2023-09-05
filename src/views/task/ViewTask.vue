@@ -19,16 +19,14 @@
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                <CTableHeaderCell scope="col"> Task Name </CTableHeaderCell>
+                <CTableHeaderCell scope="col">Description </CTableHeaderCell>
                 <CTableHeaderCell
                   scope="col"
-                  @click="sortColumfunc('name', sortDiraction)"
-                >
-                  Task Name
+                  @click="sortColumfunc('due_date', sortDiraction)"
+                  >Due Date
                   <CIcon v-if="sortDiraction === 'asc'" icon="cil-arrow-top" />
-                  <CIcon v-else icon="cil-arrow-bottom" />
                 </CTableHeaderCell>
-                <CTableHeaderCell scope="col">Description </CTableHeaderCell>
-                <CTableHeaderCell scope="col">Due Date </CTableHeaderCell>
                 <CTableHeaderCell scope="col">Project</CTableHeaderCell>
                 <CTableHeaderCell scope="col">Action</CTableHeaderCell>
               </CTableRow>
@@ -40,7 +38,18 @@
                 <CTableDataCell>{{ task.description }}</CTableDataCell>
                 <CTableDataCell>{{ task.due_date }}</CTableDataCell>
                 <CTableDataCell>{{ task.project_info?.name }}</CTableDataCell>
-                <CTableDataCell>  <CButton color="success" v-if="task.status == 'completed'" disabled >  {{ task.status }} </CButton> <CButton color="warning" v-else @click="changeStat(task.id)" >  {{ task.status }} </CButton></CTableDataCell>
+                <CTableDataCell>
+                  <CButton
+                    color="success"
+                    v-if="task.status == 'completed'"
+                    disabled
+                  >
+                    {{ task.status }}
+                  </CButton>
+                  <CButton color="warning" v-else @click="changeStat(task.id)">
+                    {{ task.status }}
+                  </CButton></CTableDataCell
+                >
               </CTableRow>
             </CTableBody>
           </CTable>
@@ -86,10 +95,10 @@ export default {
     this.getTaskListData()
   },
   computed: {
-    ...mapState('task', ['taskDetails','tastUpdateDetails']),
+    ...mapState('task', ['taskDetails', 'tastUpdateDetails']),
   },
   methods: {
-    ...mapActions('task', ['getTaskList','changeStatus']),
+    ...mapActions('task', ['getTaskList', 'changeStatus']),
     async getTaskListData() {
       await this.getTaskList('')
       if (this.taskDetails) {
@@ -123,12 +132,10 @@ export default {
       }
     },
 
-    async changeStat(id){
-       if(confirm('are you sure?'))
-             await this.changeStatus(id);
-             this.sortColumfunc(this.sortColum, this.sortDiraction)
-
-    }
+    async changeStat(id) {
+      if (confirm('are you sure?')) await this.changeStatus(id)
+      this.sortColumfunc(this.sortColum, this.sortDiraction)
+    },
   },
 }
 </script>
